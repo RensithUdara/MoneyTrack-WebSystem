@@ -69,7 +69,7 @@ class BudgetPrediction(models.Model):
         ('income_projection', 'Income Projection'),
     ]
     
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name='budget_predictions')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='budget_predictions')
     
     prediction_type = models.CharField(max_length=30, choices=PREDICTION_TYPES)
     category = models.ForeignKey('transactions.Category', on_delete=models.CASCADE, null=True, blank=True)
