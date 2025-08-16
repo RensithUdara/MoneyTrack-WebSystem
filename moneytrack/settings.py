@@ -125,8 +125,122 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# REST Framework Configuration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20
+}
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# Bank Integration Settings
+BANK_API_SETTINGS = {
+    'NSB': {
+        'api_url': 'https://api.nsb.lk',
+        'client_id': '',
+        'client_secret': '',
+    },
+    'PEOPLES': {
+        'api_url': 'https://api.peoplesbank.lk',
+        'client_id': '',
+        'client_secret': '',
+    },
+    'SAMPATH': {
+        'api_url': 'https://api.sampath.lk',
+        'client_id': '',
+        'client_secret': '',
+    },
+    'COMMERCIAL': {
+        'api_url': 'https://api.combank.lk',
+        'client_id': '',
+        'client_secret': '',
+    },
+}
+
+# Security Settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# Custom User Model
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Login/Logout URLs
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Email Configuration (for notifications)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# MoneyTrack Specific Settings
+MONEYTRACK_SETTINGS = {
+    'DEFAULT_CURRENCY': 'LKR',
+    'SUPPORTED_CURRENCIES': ['LKR', 'USD', 'EUR', 'GBP'],
+    'TRANSACTION_SYNC_INTERVAL': 300,  # 5 minutes in seconds
+    'BUDGET_ALERT_THRESHOLD': 0.8,  # 80% of budget
+    'DATA_RETENTION_DAYS': 2555,  # 7 years
+    'MAX_SHARED_LEDGER_MEMBERS': 10,
+    'ENABLE_ML_CATEGORIZATION': True,
+    'ENABLE_PREDICTIVE_BUDGETING': True,
+}
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/moneytrack.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'moneytrack': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
